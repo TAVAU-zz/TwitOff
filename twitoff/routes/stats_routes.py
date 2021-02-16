@@ -3,7 +3,7 @@ from flask import Blueprint, request, jsonify, render_template
 from sklearn.linear_model import LogisticRegression # for example
 
 from twitoff.models import User, Tweet
-# from .services.basilica_service import basilica_api_client
+from twitoff.twitter import vectorize_tweet
 
 stats_routes = Blueprint("stats_routes", __name__)
 
@@ -51,14 +51,14 @@ def predict():
 
     # example_embed_a = user_a_tweets[3].embedding
     # example_embed_b = user_b_tweets[3].embedding
+    embedding = vectorize_tweet(tweet_text)
+    result = classifier.predict([embedding])
 
-    # result = classifier.predict([example_embed_a, example_embed_b])
-
-    breakpoint()
+    # breakpoint()
 
     return render_template("results.html",
         screen_name_a=screen_name_a,
         screen_name_b=screen_name_b,
         tweet_text=tweet_text,
-        screen_name_most_likely="TODO" 
+        screen_name_most_likely=result[0] 
     )
