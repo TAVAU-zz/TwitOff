@@ -18,20 +18,44 @@ def predict():
 
     print("-----------------")
     print("FETCHING TWEETS FROM THE DATABASE...")
-   
-    #TODO
+    user_a = User.query.filter_by(name=screen_name_a).first()
+    user_b = User.query.filter_by(name=screen_name_b).first()
+    user_a_tweets = user_a.tweets
+    user_b_tweets = user_b.tweets
+
+    print("FETCHED TWEETS", len(user_a_tweets), len(user_b_tweets))
 
     print("-----------------")
     print("TRAINING THE MODEL...")
     
-    classifier = LogisticRegression()
-    # TODO: classifier.fit(___________, ___________)
+    embeddings = []
+    labels = []
+
+    for tweet in user_a_tweets:
+        embeddings.append(tweet.embedding)
+        labels.append(screen_name_a)
+
+    for tweet in user_b_tweets:
+        embeddings.append(tweet.embedding)
+        labels.append(screen_name_b)
+
 
     print("-----------------")
     print("MAKING A PREDICTION...")
 
-    # TODO
-    
+    classifier = LogisticRegression()
+    # X values / inputs: embeddings
+    # y values / labels: user
+
+    classifier.fit(embeddings, labels)
+
+    # example_embed_a = user_a_tweets[3].embedding
+    # example_embed_b = user_b_tweets[3].embedding
+
+    # result = classifier.predict([example_embed_a, example_embed_b])
+
+    breakpoint()
+
     return render_template("results.html",
         screen_name_a=screen_name_a,
         screen_name_b=screen_name_b,
