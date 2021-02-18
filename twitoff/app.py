@@ -6,6 +6,7 @@ from flask import Flask, render_template, request
 from .models import DB, User
 from .twitter import add_or_update_user
 from .routes.stats_routes import stats_routes
+import logging
 
 def create_app():
     """Create and configure an instance of the Flask application."""
@@ -15,6 +16,7 @@ def create_app():
     app.config['ENV'] = getenv('ENV') # TODO change before deploying 'debug'
     DB.init_app(app)
     app.register_blueprint(stats_routes)
+    gunicorn_logger = logging.getLogger('gunicorn.error')
 
     @app.route('/')
     def index():
