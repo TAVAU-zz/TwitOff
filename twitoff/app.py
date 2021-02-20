@@ -17,6 +17,8 @@ def create_app():
     DB.init_app(app)
     app.register_blueprint(stats_routes)
     gunicorn_logger = logging.getLogger('gunicorn.error')
+    app.logger.handlers = gunicorn_logger.handlers
+    app.logger.setLevel(logging.INFO) 
 
     @app.route('/')
     def index():
